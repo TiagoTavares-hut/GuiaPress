@@ -6,7 +6,8 @@ const Article = connection.define('articles',{
     title:{
         type: Sequelize.STRING,
         allowNull: false
-    },slug: {
+    },
+    slug:{
         type: Sequelize.STRING,
         allowNull: false
     },
@@ -14,7 +15,7 @@ const Article = connection.define('articles',{
         type: Sequelize.TEXT,
         allowNull: false
     }
-})
+});
 
 Category.hasMany(Article); // UMA Categoria tem muitos artigos
 Article.belongsTo(Category); // UM Artigo pertence a uma categoria

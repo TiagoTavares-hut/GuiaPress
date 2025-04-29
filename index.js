@@ -1,30 +1,40 @@
-const express = require("express"); //importa a biblioteca express
-const app = express(); // define express como app
-const connection = require ("./database/database") // importa o banco de dados
-const bodyParser = require ("body-parser") // importa o body-parser (para trabalhar com formulários)
+const express = require ("express");
+const app = express();
+const bodyParser = require("body-parser")
+const connection = require("./database/database")
 
-//view engine - importa o ejs para interpretar códigos html
-app.set("view engine", "ejs");
+const categoriesController = require("./categories/CategoriesController");
+const articlesController = require("./articles/ArticlesController")
+
+const Article = require("./articles/Articles")
+const Category = require("./categories/Category")
+// view engine
+app.set('view engine', 'ejs');
 
 //static
-app.use(express.static('public')); // define a pasta public para arquivos estáticos (css, img, js)
+app.use(express.static('public'));
+
 
 //body parser
-app.use(bodyParser.urlencoded({extended:false}));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json())
 
-connection //faz a conexão com banco de dados
+//Database
+connection
     .authenticate()
     .then(() => {
-        console.log("Conexão feita com sucesso");
+        console.log('conexão feita com sucesso');
     }).catch((error) => {
-        console.log(error)
+        console.log(error);
     })
 
-app.get("/", (req, res) => { 
-    res.render("index"); //exibe a mensagem na página web
+app.use("/", categoriesController);
+app.use("/", articlesController);
+
+app.get("/", (req,res) => {
+    res.render("index");
 })
 
 app.listen(4000, () => {
-    console.log("O servidor está rodando") //inicia o servidor na porta 4000
+    console.log("o servidor está rodando")
 })
